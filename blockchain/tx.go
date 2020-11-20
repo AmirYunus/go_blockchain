@@ -1,3 +1,4 @@
+//define as package blockchain which is the name of the folder
 package blockchain
 
 type TxOutput struct {

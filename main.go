@@ -18,7 +18,7 @@ package main
 import (
 	"os"
 
-	"github.com/AmirYunus/go_blockchain/cli"
+	"github.com/AmirYunus/go_blockchain/cli"	//import the cli module
 )
 
 func main() {

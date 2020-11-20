@@ -1,3 +1,4 @@
+//define as package wallet which is the name of the folder
 package wallet
 
 import (

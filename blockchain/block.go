@@ -1,3 +1,4 @@
+//define as package blockchain which is the name of the folder
 package blockchain
 
 import (
@@ -19,7 +20,7 @@ type Block struct {
 					//having this previous hash allows us to link the blocks together sort of like a back linked list
 					//(i.e. each block inside our blockchain references the last block that was created inside of the blockchain)
 
-	Nonce		 int
+	Nonce		 int		//store the nonce as an int
 }
 
 func (b *Block) HashTransactions() []byte {
@@ -40,11 +41,13 @@ func CreateBlock(txs []*Transaction, prevHash []byte) *Block {
 							//for the hash field, we will just put in an empty slice of bytes
 							//for the data field, we will take in the data string and convert it into a slice of bytes
 							//we will take the previous hash from input
-	pow := NewProof(block)
-	nonce, hash := pow.Run()
+							//put in 0 for our initial nonce
 
-	block.Hash = hash[:]
-	block.Nonce = nonce
+	pow := NewProof(block)		//runs the proof of work algorithm for each block
+	nonce, hash := pow.Run()	//execute the run function on that proof of work which will return the nonce and the hash
+
+	block.Hash = hash[:]	//take the hash and put it into our block structure
+	block.Nonce = nonce	//do the same for the nonce
 
 	return block	//return block from the CreateBlock function
 }

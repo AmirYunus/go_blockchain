@@ -1,3 +1,4 @@
+//define as package cli which is the name of the folder
 package cli
 
 import (
@@ -8,8 +9,8 @@ import (
 	"runtime"
 	"strconv"
 
-	"github.com/AmirYunus/go_blockchain/blockchain"
-	"github.com/AmirYunus/go_blockchain/wallet"
+	"github.com/AmirYunus/go_blockchain/blockchain"	//import the blockchain module
+	"github.com/AmirYunus/go_blockchain/wallet"	//import the wallet module
 )
 
 type CommandLine struct{}
