@@ -15,6 +15,7 @@ const (
 	genesisData = "First Transaction from Genesis"
 )
 
+//Implenting a blockchain struct which has a last hash and a pointer to the badger database
 type BlockChain struct {
 	LastHash []byte
 	Database *badger.DB
@@ -89,9 +90,11 @@ func InitBlockChain(address string) *BlockChain {
 	Handle(err)
 
 	blockchain := BlockChain{lastHash, db}
-	return &blockchain
+	return &blockchain	//return a reference to our blockchain
 }
 
+//create a method which will allow us to add a block to the chain
+//this method get the pointer (*) for our blockchain and then it takes a data string (to update for transactions)
 func (chain *BlockChain) AddBlock(transactions []*Transaction) {
 	var lastHash []byte
 
@@ -105,7 +108,8 @@ func (chain *BlockChain) AddBlock(transactions []*Transaction) {
 	})
 	Handle(err)
 
-	newBlock := CreateBlock(transactions, lastHash)
+	newBlock := CreateBlock(transactions, lastHash)	//we can create the current block by calling the CreateBlock function
+							//we pass in the data string (to be updated) and the hash from the previous block
 
 	err = chain.Database.Update(func(txn *badger.Txn) error {
 		err := txn.Set(newBlock.Hash, newBlock.Serialise())
