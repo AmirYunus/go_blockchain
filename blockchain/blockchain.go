@@ -42,18 +42,19 @@ func ContinueBlockChain(address string) *BlockChain {
 	opts := badger.DefaultOptions
 	opts.Dir = dbPath
 	opts.ValueDir = dbPath
-
 	db, err := badger.Open(opts)
-	Handle(err)
 
+	Handle(err)
 	err = db.Update(func(txn *badger.Txn) error {
 		item, err := txn.Get([]byte("lh"))
+
 		Handle(err)
 		lastHash, err = item.Value()
 
 		return err
 	})
 	Handle(err)
+
 	chain := BlockChain{lastHash, db}
 
 	return &chain
@@ -70,13 +71,13 @@ func InitBlockChain(address string) *BlockChain {
 	opts := badger.DefaultOptions
 	opts.Dir = dbPath
 	opts.ValueDir = dbPath
-
 	db, err := badger.Open(opts)
-	Handle(err)
 
+	Handle(err)
 	err = db.Update(func(txn *badger.Txn) error {
 		cbtx := CoinbaseTx(address, genesisData)
 		genesis := Genesis(cbtx)
+
 		fmt.Println("Genesis created")
 		err = txn.Set(genesis.Hash, genesis.Serialise())
 		Handle(err)
@@ -96,16 +97,19 @@ func (chain *BlockChain) AddBlock(transactions []*Transaction) {
 
 	err := chain.Database.View(func(txn *badger.Txn) error {
 		item, err := txn.Get([]byte("lh"))
+
 		Handle(err)
 		lastHash, err = item.Value()
 
 		return err
 	})
 	Handle(err)
+
 	newBlock := CreateBlock(transactions, lastHash)
 
 	err = chain.Database.Update(func(txn *badger.Txn) error {
 		err := txn.Set(newBlock.Hash, newBlock.Serialise())
+
 		Handle(err)
 		err = txn.Set([]byte("lh"), newBlock.Hash)
 		chain.LastHash = newBlock.Hash
@@ -126,8 +130,11 @@ func (iter *BlockChainIterator) Next() *Block {
 
 	err := iter.Database.View(func(txn *badger.Txn) error {
 		item, err := txn.Get(iter.CurrentHash)
+
 		Handle(err)
+
 		encodedBlock, err := item.Value()
+
 		block = Deserialise(encodedBlock)
 
 		return err
